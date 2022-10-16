@@ -11,29 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Slf4j
-@Component
-public class SaveArtikelHandler implements CommandHandler<SaveArtikel, SaveArtikelRequested, ArtikelId> {
+public interface SaveArtikelHandler extends CommandHandler<SaveArtikel, SaveArtikelRequested, ArtikelId> {
 
-    @Autowired
-    private SaveArtikelValidator saveArtikelValidator;
-
-    @Autowired
-    private ArtikelEventRepository artikelEventRepository;
-
-
-
-    @Override
-    public Either<CommandFailure, SaveArtikelRequested> handle(SaveArtikel command, ArtikelId entityId) {
-        log.info("Handle command: {}", command);
-
-        return saveArtikelValidator.acceptOrReject(command).fold(
-                Either::left,
-                accept -> {
-                    SaveArtikelRequested event = SaveArtikelRequested.eventOf(entityId, command.getTitel(), command.getArtikelInhalt(), command.getTimestamp());
-                    ArtikelEventId artikelEventId = artikelEventRepository.store(event);
-                    return Either.right(event);
-                }
-        );
-    }
 }

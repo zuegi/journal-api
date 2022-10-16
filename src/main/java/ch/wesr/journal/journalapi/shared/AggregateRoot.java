@@ -30,7 +30,7 @@ public abstract class AggregateRoot <E, ID extends Serializable> implements Enti
         return commandHandler.handle(command, entityId);
     }
 
-    protected <A extends Command, B extends Event> CommandHandler<A, B, ID> getHandler(Class<? extends CommandHandler<A, B, ID>> commandHandlerClass) {
+    public <A extends Command, B extends Event> CommandHandler<A, B, ID> getHandler(Class<? extends CommandHandler<A, B, ID>> commandHandlerClass) {
         return applicationContext.getBean(commandHandlerClass);
     }
 
