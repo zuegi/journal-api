@@ -11,6 +11,8 @@ public class SaveArtikelRequested implements ArtikelEvent {
 
     ArtikelEventId artikelEventId = new ArtikelEventId();
     ArtikelId artikelId;
+    String titel;
+    String artikelInhalt;
     LocalDateTime timestamp;
 
 

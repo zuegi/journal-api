@@ -8,5 +8,7 @@ import java.time.LocalDateTime;
 @Value(staticConstructor = "commandOf")
 public class SaveArtikel implements ArtikelCommand {
     ArtikelId artikelId;
+    String titel;
+    String artikelInhalt;
     LocalDateTime timestamp;
 }

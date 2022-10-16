@@ -30,7 +30,7 @@ public class SaveArtikelHandler implements CommandHandler<SaveArtikel, SaveArtik
         return saveArtikelValidator.acceptOrReject(command).fold(
                 Either::left,
                 accept -> {
-                    SaveArtikelRequested event = SaveArtikelRequested.eventOf(entityId, command.getTimestamp());
+                    SaveArtikelRequested event = SaveArtikelRequested.eventOf(entityId, command.getTitel(), command.getArtikelInhalt(), command.getTimestamp());
                     ArtikelEventId artikelEventId = artikelEventRepository.store(event);
                     return Either.right(event);
                 }

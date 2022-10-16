@@ -33,7 +33,8 @@ public class ArtikelController {
     public ResponseEntity<ArtikelResponse> createVertraulichkeitsbereich(@RequestBody @Valid ArtikelRequest artikelRequest) {
         log.info("create artikel {} ", artikelRequest.toString());
 
-        SaveArtikel saveArtikel = SaveArtikel.commandOf(new ArtikelId(), LocalDateTime.now());
+        // FIXME korrekt
+        SaveArtikel saveArtikel = SaveArtikel.commandOf(new ArtikelId(), artikelRequest.getTitel(), artikelRequest.getTitel(), artikelRequest.getErstellungsDatum());
 
         // und was mit dem CommandFailure
         Either<CommandFailure, SaveArtikelRequested> commandFailure = artikelService.perform(saveArtikel);
