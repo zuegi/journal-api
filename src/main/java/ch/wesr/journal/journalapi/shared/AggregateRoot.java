@@ -1,5 +1,7 @@
 package ch.wesr.journal.journalapi.shared;
 
+import ch.wesr.journal.journalapi.features.artikel.domain.event.SaveArtikelRequested;
+import io.vavr.control.Either;
 import org.springframework.context.ApplicationContext;
 
 import java.io.Serializable;
@@ -23,7 +25,7 @@ public abstract class AggregateRoot <E, ID extends Serializable> implements Enti
     protected abstract AggregateRootBehavior<ID> initialBehavior();
 
 
-    public <A extends Command, B extends Event> CommandFailure handle(A command) {
+    public <A extends Command, B extends Event> Either<CommandFailure, B> handle(A command) {
         CommandHandler<A, B, ID> commandHandler = (CommandHandler<A, B, ID>) behavior.handlers.get(command.getClass());
         return commandHandler.handle(command, entityId);
     }

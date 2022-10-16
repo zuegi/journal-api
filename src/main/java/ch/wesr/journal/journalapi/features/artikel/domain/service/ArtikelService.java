@@ -1,8 +1,10 @@
 package ch.wesr.journal.journalapi.features.artikel.domain.service;
 
-import ch.wesr.journal.journalapi.features.artikel.domain.command.PerformArtikel;
+import ch.wesr.journal.journalapi.features.artikel.domain.command.SaveArtikel;
 import ch.wesr.journal.journalapi.features.artikel.domain.entity.Artikel;
+import ch.wesr.journal.journalapi.features.artikel.domain.event.SaveArtikelRequested;
 import ch.wesr.journal.journalapi.shared.CommandFailure;
+import io.vavr.control.Either;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
@@ -15,11 +17,11 @@ public class ArtikelService {
 
     @Autowired
     ApplicationContext applicationContext;
-    public CommandFailure perform(PerformArtikel performArtikel) {
+    public Either<CommandFailure, SaveArtikelRequested> perform(SaveArtikel saveArtikel) {
 
-        Artikel artikel = new Artikel(applicationContext, performArtikel.getArtikelId());
+        Artikel artikel = new Artikel(applicationContext, saveArtikel.getArtikelId());
 
-        return artikel.handle(performArtikel);
+        return artikel.handle(saveArtikel);
 
     }
 }

@@ -14,6 +14,6 @@ public class ArtikelId extends RandomUUID {
 
     @Override
     protected String getPrefix() {
-        return "JNRL-%s";
+        return "ART-%s";
     }
 }
