@@ -21,7 +21,6 @@ import java.time.LocalDateTime;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
-//@SpringBootTest
 class ArtikelUnitTest {
 
     ApplicationContext applicationContext = Mockito.mock(ApplicationContext.class);
