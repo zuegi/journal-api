@@ -11,17 +11,20 @@ import ch.wesr.journal.journalapi.shared.CommandFailure;
 import io.vavr.control.Either;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 @Slf4j
-@Component
 public class SaveArtikelHandlerImpl implements SaveArtikelHandler {
-
-    @Autowired
+    private ApplicationContext applicationContext;
     private SaveArtikelValidator saveArtikelValidator;
-
-    @Autowired
     private ArtikelEventRepository artikelEventRepository;
+
+
+    public SaveArtikelHandlerImpl(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
+        initHandler();
+    }
 
 
 
@@ -37,5 +40,11 @@ public class SaveArtikelHandlerImpl implements SaveArtikelHandler {
                     return Either.right(event);
                 }
         );
+    }
+
+    // FIXME wahrscheinlich in eine Abstracte Klasse auslagern, wie beim Aggregate Root
+    // bzw. das Interface in die
+    private void initHandler() {
+        // FIXME ausprogrammieren - ein RegistryHandler?
     }
 }

@@ -30,6 +30,7 @@ class ArtikelUnitTest {
 
     ArtikelStore artikelStore = Mockito.mock(ArtikelStore.class);
 
+    // FIXME Handler und Validator müssen keine Interfaces haben
     SaveArtikelHandler saveArtikelHandler;
     SaveArtikelValidator saveArtikelValidator;
 
@@ -37,7 +38,7 @@ class ArtikelUnitTest {
 
     @BeforeEach
     void init() throws IllegalAccessException {
-        saveArtikelHandler = new SaveArtikelHandlerImpl();
+        saveArtikelHandler = new SaveArtikelHandlerImpl(applicationContext);
         saveArtikelValidator = new SaveArtikelValidatorImpl();
         artikelEventRepository = new ArtikelEventRepositoryImpl();
 
