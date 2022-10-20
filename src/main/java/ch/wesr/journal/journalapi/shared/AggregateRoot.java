@@ -14,7 +14,7 @@ public abstract class AggregateRoot <E, ID extends Serializable> implements Enti
     public final ID entityId;
     private final ApplicationContext applicationContext;
 
-    private AggregateRootBehavior<ID> behavior;
+    private final AggregateRootBehavior<ID> behavior;
 
     protected AggregateRoot(ApplicationContext applicationContext, ID entityId) {
         this.entityId = entityId;
@@ -25,12 +25,14 @@ public abstract class AggregateRoot <E, ID extends Serializable> implements Enti
     protected abstract AggregateRootBehavior<ID> initialBehavior();
 
 
+    @SuppressWarnings("unchecked")
     public <A extends Command, B extends Event> Either<CommandFailure, B> handle(A command) {
         CommandHandler<A, B, ID> commandHandler = (CommandHandler<A, B, ID>) behavior.handlers.get(command.getClass());
         return commandHandler.handle(command, entityId);
     }
 
     public <A extends Command, B extends Event> CommandHandler<A, B, ID> getHandler(Class<? extends CommandHandler<A, B, ID>> commandHandlerClass) {
+        // get the beans in spring boot applicationContext
         return applicationContext.getBean(commandHandlerClass);
     }
 
