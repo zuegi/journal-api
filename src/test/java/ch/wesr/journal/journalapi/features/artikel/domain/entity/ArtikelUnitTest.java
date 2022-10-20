@@ -5,7 +5,6 @@ import ch.wesr.journal.journalapi.features.artikel.domain.command.SaveArtikelHan
 import ch.wesr.journal.journalapi.features.artikel.domain.command.SaveArtikelValidator;
 import ch.wesr.journal.journalapi.features.artikel.domain.command.impl.SaveArtikelHandlerImpl;
 import ch.wesr.journal.journalapi.features.artikel.domain.command.impl.SaveArtikelValidatorImpl;
-import ch.wesr.journal.journalapi.features.artikel.domain.event.SaveArtikelRequested;
 import ch.wesr.journal.journalapi.features.artikel.domain.vo.ArtikelId;
 import ch.wesr.journal.journalapi.features.artikel.infrastructure.repository.ArtikelEventRepositoryImpl;
 import ch.wesr.journal.journalapi.features.artikel.infrastructure.repository.ArtikelStore;

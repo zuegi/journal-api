@@ -1,6 +1,5 @@
 package ch.wesr.journal.journalapi.shared;
 
-import ch.wesr.journal.journalapi.features.artikel.domain.event.SaveArtikelRequested;
 import io.vavr.control.Either;
 import org.springframework.context.ApplicationContext;
 
