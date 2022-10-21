@@ -1,4 +1,4 @@
-package ch.wesr.journal.journalapi.features.artikel.domain.service;
+package ch.wesr.journal.journalapi.features.artikel.application;
 
 import ch.wesr.journal.journalapi.features.artikel.domain.command.SaveArtikel;
 import ch.wesr.journal.journalapi.features.artikel.domain.entity.Artikel;

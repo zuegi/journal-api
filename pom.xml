@@ -130,6 +130,9 @@
                     <configuration>
                         <printSummary>true</printSummary>
                         <trimStackTrace>false</trimStackTrace>
+                        <includes>
+                            <include>**/*Test.java</include>
+                        </includes>
                     </configuration>
                 </plugin>
             </plugins>

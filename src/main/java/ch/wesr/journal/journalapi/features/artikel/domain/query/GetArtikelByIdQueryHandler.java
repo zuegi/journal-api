@@ -25,6 +25,7 @@ public class GetArtikelByIdQueryHandler implements QueryHandler<GetArtikelByIDQu
     public Either<QueryFailure, GetArtikekelByIdRequested> handle(GetArtikelByIDQuery query, ArtikelId entityId) {
         log.info("query: {}", query.getArtikelId().toString());
 
+        // Im Unit Test ist dieser Artikel null
         ArtikelEvent artikelEvent = artikelEventRepository.getArtikelEventByArtikelId(entityId);
 
         GetArtikekelByIdRequested getArtikekelByIdRequested = GetArtikekelByIdRequested.eventOf(artikelEvent.getArtikelId(), artikelEvent.getTitel(), artikelEvent.getArtikelInhalt(), artikelEvent.getTimestamp());

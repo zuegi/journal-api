@@ -4,7 +4,7 @@ package ch.wesr.journal.journalapi.features.artikel.infrastructure.rest.controll
 import ch.wesr.journal.journalapi.features.artikel.domain.command.SaveArtikel;
 import ch.wesr.journal.journalapi.features.artikel.domain.event.SaveArtikelRequested;
 import ch.wesr.journal.journalapi.features.artikel.domain.query.GetArtikelByIDQuery;
-import ch.wesr.journal.journalapi.features.artikel.domain.service.ArtikelService;
+import ch.wesr.journal.journalapi.features.artikel.application.ArtikelService;
 import ch.wesr.journal.journalapi.features.artikel.domain.vo.ArtikelId;
 import ch.wesr.journal.journalapi.features.artikel.infrastructure.rest.model.ArtikelRequest;
 import ch.wesr.journal.journalapi.features.artikel.infrastructure.rest.model.ArtikelResponse;
