@@ -32,7 +32,6 @@ public class ArtikelService {
 
         Artikel artikel = new Artikel(applicationContext, getArtikelByIDQuery.getArtikelId());
 
-        // ToDO ArtikelQueryHandler erstellen und perform Methode ausprogrammieren
         return artikel.handleQuery(getArtikelByIDQuery);
     }
 }
