@@ -81,10 +81,6 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
     </dependencies>
 
     <build>
@@ -101,7 +97,47 @@
                     </excludes>
                 </configuration>
             </plugin>
+            <!-- Surefire Testplugin -->
+            <!-- Führt UNit-Tests aus. Alle Klassen in den test-Directories werden als potentielle Testklassen angesehen.
+                 Ausgeschlossen von der Testausführung sind alle Sourcen -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <printSummary>true</printSummary>
+                    <!-- Verhindert, dass der Stacktrace verkuerzt angezeigt wird ... ist
+                        noch hilfreich bei Fehlersuche -->
+                    <trimStackTrace>false</trimStackTrace>
+                    <argLine>-Xms512m -Xmx1024m</argLine>
+                    <excludes>
+                        <!-- Exclude Integrationtests -->
+                        <exclude>**/*IntegrationTest.java</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+        <id>integration-test</id>
+        <build>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <configuration>
+                        <printSummary>true</printSummary>
+                        <trimStackTrace>false</trimStackTrace>
+                    </configuration>
+                </plugin>
+            </plugins>
+
+        </build>
+
+    </profile>
+
+</profiles>
 
 </project>
