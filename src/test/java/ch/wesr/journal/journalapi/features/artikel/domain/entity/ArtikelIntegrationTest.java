@@ -1,13 +1,8 @@
 package ch.wesr.journal.journalapi.features.artikel.domain.entity;
 
 import ch.wesr.journal.journalapi.features.artikel.domain.command.SaveArtikel;
-import ch.wesr.journal.journalapi.features.artikel.domain.command.SaveArtikelHandler;
-import ch.wesr.journal.journalapi.features.artikel.domain.command.SaveArtikelValidator;
-import ch.wesr.journal.journalapi.features.artikel.domain.event.SaveArtikelRequested;
 import ch.wesr.journal.journalapi.features.artikel.domain.vo.ArtikelId;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
@@ -15,7 +10,6 @@ import org.springframework.context.ApplicationContext;
 import java.time.LocalDateTime;
 
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
 
 @SpringBootTest
 class ArtikelIntegrationTest {
@@ -35,7 +29,7 @@ class ArtikelIntegrationTest {
 
         Artikel artikel = new Artikel(applicationContext, artikelId);
 
-        artikel.handle(saveArtikel);
+        artikel.handleCommand(saveArtikel);
         // FIXME artikel wieder holen und vergleichen...
         // dann sind wir aber schon im Integration test, was ich eigentlich nicht will
         // Also anschauen, wie ich die Infrastruktur aus der Domain rauskriege

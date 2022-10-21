@@ -4,11 +4,8 @@ import io.vavr.control.Either;
 import org.springframework.context.ApplicationContext;
 
 import java.io.Serializable;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
-public abstract class AggregateRoot <E, ID extends Serializable> implements Entity<E, ID> {
+public abstract class AggregateRoot<E, ID extends Serializable> implements Entity<E, ID> {
 
     public final ID entityId;
     private final ApplicationContext applicationContext;
@@ -23,38 +20,34 @@ public abstract class AggregateRoot <E, ID extends Serializable> implements Enti
 
     protected abstract AggregateRootBehavior<ID> initialBehavior();
 
-
+    /*
+        Command Section
+     */
     @SuppressWarnings("unchecked")
-    public <A extends Command, B extends Event> Either<CommandFailure, B> handle(A command) {
-        CommandHandler<A, B, ID> commandHandler = (CommandHandler<A, B, ID>) behavior.handlers.get(command.getClass());
+    public <A extends Command, B extends Event> Either<CommandFailure, B> handleCommand(A command) {
+        CommandHandler<A, B, ID> commandHandler = (CommandHandler<A, B, ID>) behavior.commandHandlers.get(command.getClass());
         return commandHandler.handle(command, entityId);
     }
 
-    public <A extends Command, B extends Event> CommandHandler<A, B, ID> getHandler(Class<? extends CommandHandler<A, B, ID>> commandHandlerClass) {
+    public <A extends Command, B extends Event> CommandHandler<A, B, ID> getCommandHandler(Class<? extends CommandHandler<A, B, ID>> commandHandlerClass) {
         // get the beans in spring boot applicationContext
         return applicationContext.getBean(commandHandlerClass);
     }
 
 
-    public static class AggregateRootBehavior<ID> {
-
-        protected final Map<Class<? extends Command>, CommandHandler<? extends Command, ? extends Event, ID>> handlers;
-
-        public AggregateRootBehavior(Map<Class<? extends Command>, CommandHandler<? extends Command, ? extends Event, ID>> handlers) {
-            this.handlers = Collections.unmodifiableMap(handlers);
-        }
+    /*
+        Query Section
+     */
+    @SuppressWarnings("unchecked")
+    public <A extends Query, B extends Event> Either<QueryFailure, B> handleQuery(A query) {
+        QueryHandler<A, B, ID> queryHandler = (QueryHandler<A, B, ID>) behavior.queryHandlers.get(query.getClass());
+        return queryHandler.handle(query, entityId);
     }
 
-    public static class AggregateRootBehaviorBuilder<ID> {
-
-        private final Map<Class<? extends Command>, CommandHandler<? extends Command, ? extends Event, ID>> handlers = new HashMap<>();
-
-        public <A extends Command, B extends Event> void setCommandHandler(Class<A> commandClass, CommandHandler<A, B, ID> handler) {
-            handlers.put(commandClass, handler);
-        }
-
-        public AggregateRootBehavior<ID> build() {
-            return new AggregateRootBehavior<>(handlers);
-        }
+    public <A extends Query, B extends Event> QueryHandler<A, B, ID> getQueryHandler(Class<? extends QueryHandler<A, B, ID>> queryHandlerClass) {
+        // get the beans in spring boot applicationContext
+        return applicationContext.getBean(queryHandlerClass);
     }
+
+
 }

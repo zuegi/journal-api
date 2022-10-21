@@ -4,11 +4,9 @@ import ch.wesr.journal.journalapi.features.artikel.domain.command.SaveArtikel;
 import ch.wesr.journal.journalapi.features.artikel.domain.entity.Artikel;
 import ch.wesr.journal.journalapi.features.artikel.domain.event.GetArtikekelByIdRequested;
 import ch.wesr.journal.journalapi.features.artikel.domain.event.SaveArtikelRequested;
-import ch.wesr.journal.journalapi.features.artikel.domain.query.ArtikelResponseDTO;
 import ch.wesr.journal.journalapi.features.artikel.domain.query.GetArtikelByIDQuery;
-import ch.wesr.journal.journalapi.features.artikel.domain.vo.ArtikelId;
-import ch.wesr.journal.journalapi.features.artikel.infrastructure.rest.model.ArtikelResponse;
 import ch.wesr.journal.journalapi.shared.CommandFailure;
+import ch.wesr.journal.journalapi.shared.QueryFailure;
 import io.vavr.control.Either;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -26,15 +24,15 @@ public class ArtikelService {
 
         Artikel artikel = new Artikel(applicationContext, saveArtikel.getArtikelId());
 
-        return artikel.handle(saveArtikel);
+        return artikel.handleCommand(saveArtikel);
 
     }
 
-    public Either<CommandFailure, GetArtikekelByIdRequested> perform(GetArtikelByIDQuery getArtikelByIDQuery) {
+    public Either<QueryFailure, GetArtikekelByIdRequested> perform(GetArtikelByIDQuery getArtikelByIDQuery) {
 
         Artikel artikel = new Artikel(applicationContext, getArtikelByIDQuery.getArtikelId());
 
         // ToDO ArtikelQueryHandler erstellen und perform Methode ausprogrammieren
-        return artikel.perform(getArtikelByIDQuery);
+        return artikel.handleQuery(getArtikelByIDQuery);
     }
 }

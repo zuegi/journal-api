@@ -61,7 +61,7 @@ class ArtikelUnitTest {
         Artikel artikel = new Artikel(applicationContext, artikelId);
 
         // when
-        artikel.handle(saveArtikel);
+        artikel.handleCommand(saveArtikel);
 
         // then
         Mockito.verify(artikelStore, times(1)).save(artikelEntityCaptor.capture());
