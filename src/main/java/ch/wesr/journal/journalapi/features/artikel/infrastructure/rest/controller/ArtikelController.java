@@ -3,6 +3,7 @@ package ch.wesr.journal.journalapi.features.artikel.infrastructure.rest.controll
 
 import ch.wesr.journal.journalapi.features.artikel.domain.command.SaveArtikel;
 import ch.wesr.journal.journalapi.features.artikel.domain.event.SaveArtikelRequested;
+import ch.wesr.journal.journalapi.features.artikel.domain.query.GetArtikelByIDQuery;
 import ch.wesr.journal.journalapi.features.artikel.domain.service.ArtikelService;
 import ch.wesr.journal.journalapi.features.artikel.domain.vo.ArtikelId;
 import ch.wesr.journal.journalapi.features.artikel.infrastructure.rest.model.ArtikelRequest;
@@ -13,13 +14,9 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.time.LocalDateTime;
 
 @Slf4j
 @AllArgsConstructor
@@ -33,14 +30,21 @@ public class ArtikelController {
     public ResponseEntity<ArtikelResponse> createVertraulichkeitsbereich(@RequestBody @Valid ArtikelRequest artikelRequest) {
         log.info("create artikel {} ", artikelRequest.toString());
 
-        // FIXME korrekt
         SaveArtikel saveArtikel = SaveArtikel.commandOf(new ArtikelId(), artikelRequest.getTitel(), artikelRequest.getTitel(), artikelRequest.getErstellungsDatum());
 
-        // und was mit dem CommandFailure
         Either<CommandFailure, SaveArtikelRequested> commandFailure = artikelService.perform(saveArtikel);
-
+        // FIXME commandFailure in ArtikelResponse
         return ResponseEntity.accepted().body(new ArtikelResponse());
     }
 
+    @GetMapping("{aggregateId}")
+    public ResponseEntity<ArtikelResponse> getBankAccount(@PathVariable String aggregateId) {
+        log.info("get artikel with aggregateId {}", aggregateId);
+        final var result = artikelService.perform(GetArtikelByIDQuery.eventOf(new ArtikelId(aggregateId)));
 
+        log.info("Get Artikel result: {}", result);
+
+        // FIXME commandFailure in ArtikelResponse ohne new mit staticContructor = valueOf oder so
+        return ResponseEntity.ok(new ArtikelResponse());
+    }
 }
