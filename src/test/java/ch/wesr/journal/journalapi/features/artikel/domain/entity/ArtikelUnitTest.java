@@ -5,11 +5,17 @@ import ch.wesr.journal.journalapi.features.artikel.domain.command.SaveArtikelHan
 import ch.wesr.journal.journalapi.features.artikel.domain.command.SaveArtikelValidator;
 import ch.wesr.journal.journalapi.features.artikel.domain.command.impl.SaveArtikelHandlerImpl;
 import ch.wesr.journal.journalapi.features.artikel.domain.command.impl.SaveArtikelValidatorImpl;
+import ch.wesr.journal.journalapi.features.artikel.domain.event.ArtikelEvent;
+import ch.wesr.journal.journalapi.features.artikel.domain.event.GetArtikekelByIdRequested;
 import ch.wesr.journal.journalapi.features.artikel.domain.query.GetArtikelByIDQuery;
 import ch.wesr.journal.journalapi.features.artikel.domain.query.GetArtikelByIdQueryHandler;
+import ch.wesr.journal.journalapi.features.artikel.domain.vo.ArtikelEventId;
 import ch.wesr.journal.journalapi.features.artikel.domain.vo.ArtikelId;
 import ch.wesr.journal.journalapi.features.artikel.infrastructure.repository.ArtikelEventRepositoryImpl;
 import ch.wesr.journal.journalapi.features.artikel.infrastructure.repository.ArtikelStore;
+import ch.wesr.journal.journalapi.shared.Event;
+import ch.wesr.journal.journalapi.shared.QueryFailure;
+import io.vavr.control.Either;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,7 +26,9 @@ import org.mockito.Mockito;
 import org.springframework.context.ApplicationContext;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
@@ -85,17 +93,31 @@ class ArtikelUnitTest {
     }
 
 
-    @Disabled
     @Test
     void getArtikelById() {
         // given
         ArtikelId artikelId = new ArtikelId();
         Artikel artikel = new Artikel(applicationContext, artikelId);
         GetArtikelByIDQuery getArtikelByIDQuery = GetArtikelByIDQuery.eventOf(artikelId);
-        artikel.handleQuery(getArtikelByIDQuery);
+
+        ArtikelEntity artikelEntity = new ArtikelEntity();
+        artikelEntity.setArtikelId(artikelId.id);
+        artikelEntity.setTitel("Titel");
+        artikelEntity.setArtikelInhalt("Inhalt");
+        artikelEntity.setErstellungsTS(LocalDateTime.now());
+
+        when(artikelStore.findByArtikelId(any(String.class))).thenReturn(Optional.of(artikelEntity));
+
+        // when
+        Either<QueryFailure, Event> event = artikel.handleQuery(getArtikelByIDQuery);
+
 
         // then
-        Mockito.verify(artikelStore, times(1)).findById(artikelIdCaptor.capture());
+        Assertions.assertThat(event.isRight()).isTrue();
+
+        ArtikelEvent artikelEventFromRepo = (ArtikelEvent) event.get();
+        Assertions.assertThat(artikelEventFromRepo).isNotNull();
+
     }
 
 }
