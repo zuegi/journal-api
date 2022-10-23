@@ -27,7 +27,7 @@ public class ArtikelController {
     private ArtikelService artikelService;
 
     @PostMapping
-    public ResponseEntity<ArtikelResponse> createVertraulichkeitsbereich(@RequestBody @Valid ArtikelRequest artikelRequest) {
+    public ResponseEntity<ArtikelResponse> createArtikel(@RequestBody @Valid ArtikelRequest artikelRequest) {
         log.info("create artikel {} ", artikelRequest.toString());
 
         SaveArtikel saveArtikel = SaveArtikel.commandOf(new ArtikelId(), artikelRequest.getTitel(), artikelRequest.getTitel(), artikelRequest.getErstellungsDatum());
@@ -38,7 +38,7 @@ public class ArtikelController {
     }
 
     @GetMapping("{aggregateId}")
-    public ResponseEntity<ArtikelResponse> getBankAccount(@PathVariable String aggregateId) {
+    public ResponseEntity<ArtikelResponse> getArtikelByAggregateId(@PathVariable String aggregateId) {
         log.info("get artikel with aggregateId {}", aggregateId);
         final var result = artikelService.perform(GetArtikelByIDQuery.eventOf(new ArtikelId(aggregateId)));
 
@@ -47,4 +47,6 @@ public class ArtikelController {
         // FIXME commandFailure in ArtikelResponse ohne new mit staticContructor = valueOf oder so
         return ResponseEntity.ok(new ArtikelResponse());
     }
+
+
 }

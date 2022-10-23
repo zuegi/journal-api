@@ -1,5 +1,6 @@
 package ch.wesr.journal.journalapi.features.artikel.domain.entity;
 
+import ch.wesr.journal.journalapi.features.artikel.domain.Artikel;
 import ch.wesr.journal.journalapi.features.artikel.domain.command.SaveArtikel;
 import ch.wesr.journal.journalapi.features.artikel.domain.event.ArtikelEvent;
 import ch.wesr.journal.journalapi.features.artikel.domain.query.GetArtikelByIDQuery;

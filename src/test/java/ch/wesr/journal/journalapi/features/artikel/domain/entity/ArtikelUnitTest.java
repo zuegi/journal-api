@@ -1,15 +1,14 @@
 package ch.wesr.journal.journalapi.features.artikel.domain.entity;
 
+import ch.wesr.journal.journalapi.features.artikel.domain.Artikel;
 import ch.wesr.journal.journalapi.features.artikel.domain.command.SaveArtikel;
 import ch.wesr.journal.journalapi.features.artikel.domain.command.SaveArtikelHandler;
 import ch.wesr.journal.journalapi.features.artikel.domain.command.SaveArtikelValidator;
 import ch.wesr.journal.journalapi.features.artikel.domain.command.impl.SaveArtikelHandlerImpl;
 import ch.wesr.journal.journalapi.features.artikel.domain.command.impl.SaveArtikelValidatorImpl;
 import ch.wesr.journal.journalapi.features.artikel.domain.event.ArtikelEvent;
-import ch.wesr.journal.journalapi.features.artikel.domain.event.GetArtikekelByIdRequested;
 import ch.wesr.journal.journalapi.features.artikel.domain.query.GetArtikelByIDQuery;
 import ch.wesr.journal.journalapi.features.artikel.domain.query.GetArtikelByIdQueryHandler;
-import ch.wesr.journal.journalapi.features.artikel.domain.vo.ArtikelEventId;
 import ch.wesr.journal.journalapi.features.artikel.domain.vo.ArtikelId;
 import ch.wesr.journal.journalapi.features.artikel.infrastructure.repository.ArtikelEventRepositoryImpl;
 import ch.wesr.journal.journalapi.features.artikel.infrastructure.repository.ArtikelStore;
@@ -19,7 +18,6 @@ import io.vavr.control.Either;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
