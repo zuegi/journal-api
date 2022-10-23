@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -48,5 +49,14 @@ public class ArtikelEventRepositoryImpl implements ArtikelEventRepository {
             return GetArtikekelByIdRequested.eventOf(new ArtikelId(artikelEntity.getArtikelId()), artikelEntity.getTitel(), artikelEntity.getArtikelInhalt(), artikelEntity.getErstellungsTS());
         }
         return null;
+    }
+
+    @Override
+    public List<ArtikelEvent> getAllArtikelEvents() {
+        List<ArtikelEntity> alleArtikelEntity = artikelStore.findAll();
+
+        return alleArtikelEntity.stream()
+                .map(artikelEntity -> (ArtikelEvent)GetArtikekelByIdRequested.eventOf(new ArtikelId(artikelEntity.getArtikelId()), artikelEntity.getTitel(), artikelEntity.getArtikelInhalt(), artikelEntity.getErstellungsTS()))
+                .toList();
     }
 }

@@ -4,6 +4,7 @@ import ch.wesr.journal.journalapi.features.artikel.domain.command.SaveArtikel;
 import ch.wesr.journal.journalapi.features.artikel.domain.Artikel;
 import ch.wesr.journal.journalapi.features.artikel.domain.event.GetArtikekelByIdRequested;
 import ch.wesr.journal.journalapi.features.artikel.domain.event.SaveArtikelRequested;
+import ch.wesr.journal.journalapi.features.artikel.domain.query.GetAlleArtikelQuery;
 import ch.wesr.journal.journalapi.features.artikel.domain.query.GetArtikelByIDQuery;
 import ch.wesr.journal.journalapi.shared.CommandFailure;
 import ch.wesr.journal.journalapi.shared.QueryFailure;
@@ -20,6 +21,8 @@ public class ArtikelService {
 
     @Autowired
     ApplicationContext applicationContext;
+
+
     public Either<CommandFailure, SaveArtikelRequested> perform(SaveArtikel saveArtikel) {
 
         Artikel artikel = new Artikel(applicationContext, saveArtikel.getArtikelId());
@@ -33,5 +36,12 @@ public class ArtikelService {
         Artikel artikel = new Artikel(applicationContext, getArtikelByIDQuery.getArtikelId());
 
         return artikel.handleQuery(getArtikelByIDQuery);
+    }
+
+    public Either<QueryFailure, GetArtikekelByIdRequested> perform(GetAlleArtikelQuery getAlleArtikelQuery) {
+
+        Artikel artikel = new Artikel(applicationContext, null);
+
+        return artikel.handleQuery(getAlleArtikelQuery);
     }
 }

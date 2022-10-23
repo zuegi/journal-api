@@ -3,6 +3,7 @@ package ch.wesr.journal.journalapi.features.artikel.infrastructure.rest.controll
 
 import ch.wesr.journal.journalapi.features.artikel.domain.command.SaveArtikel;
 import ch.wesr.journal.journalapi.features.artikel.domain.event.SaveArtikelRequested;
+import ch.wesr.journal.journalapi.features.artikel.domain.query.GetAlleArtikelQuery;
 import ch.wesr.journal.journalapi.features.artikel.domain.query.GetArtikelByIDQuery;
 import ch.wesr.journal.journalapi.features.artikel.application.ArtikelService;
 import ch.wesr.journal.journalapi.features.artikel.domain.vo.ArtikelId;
@@ -48,5 +49,14 @@ public class ArtikelController {
         return ResponseEntity.ok(new ArtikelResponse());
     }
 
+    @GetMapping("/all")
+    public ResponseEntity getAlleArtikel() {
+        log.info("get all artikel");
+
+        // FIXME was bring der Service zurück (Requested oder Response)
+        artikelService.perform(new GetAlleArtikelQuery());
+
+        return null;
+    }
 
 }

@@ -2,6 +2,8 @@ package ch.wesr.journal.journalapi.features.artikel.domain;
 
 import ch.wesr.journal.journalapi.features.artikel.domain.command.SaveArtikel;
 import ch.wesr.journal.journalapi.features.artikel.domain.command.SaveArtikelHandler;
+import ch.wesr.journal.journalapi.features.artikel.domain.query.GetAlleArtikelQuery;
+import ch.wesr.journal.journalapi.features.artikel.domain.query.GetAlleArtikelQueryHandler;
 import ch.wesr.journal.journalapi.features.artikel.domain.query.GetArtikelByIDQuery;
 import ch.wesr.journal.journalapi.features.artikel.domain.query.GetArtikelByIdQueryHandler;
 import ch.wesr.journal.journalapi.features.artikel.domain.vo.ArtikelId;
@@ -21,6 +23,7 @@ public class Artikel extends AggregateRoot<Artikel, ArtikelId> {
         AggregateRootBehaviorBuilder<ArtikelId> behaviorBuilder = new AggregateRootBehaviorBuilder<>();
         behaviorBuilder.setCommandHandler(SaveArtikel.class, getCommandHandler(SaveArtikelHandler.class));
         behaviorBuilder.setQueryHandler(GetArtikelByIDQuery.class, getQueryHandler(GetArtikelByIdQueryHandler.class));
+        behaviorBuilder.setQueryHandler(GetAlleArtikelQuery.class, getQueryHandler(GetAlleArtikelQueryHandler.class));
         return behaviorBuilder.build();
     }
 

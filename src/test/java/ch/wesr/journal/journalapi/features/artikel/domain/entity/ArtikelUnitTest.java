@@ -7,6 +7,8 @@ import ch.wesr.journal.journalapi.features.artikel.domain.command.SaveArtikelVal
 import ch.wesr.journal.journalapi.features.artikel.domain.command.impl.SaveArtikelHandlerImpl;
 import ch.wesr.journal.journalapi.features.artikel.domain.command.impl.SaveArtikelValidatorImpl;
 import ch.wesr.journal.journalapi.features.artikel.domain.event.ArtikelEvent;
+import ch.wesr.journal.journalapi.features.artikel.domain.query.GetAlleArtikelQuery;
+import ch.wesr.journal.journalapi.features.artikel.domain.query.GetAlleArtikelQueryHandler;
 import ch.wesr.journal.journalapi.features.artikel.domain.query.GetArtikelByIDQuery;
 import ch.wesr.journal.journalapi.features.artikel.domain.query.GetArtikelByIdQueryHandler;
 import ch.wesr.journal.journalapi.features.artikel.domain.vo.ArtikelId;
@@ -41,6 +43,9 @@ class ArtikelUnitTest {
     SaveArtikelValidator saveArtikelValidator;
 
     GetArtikelByIdQueryHandler getArtikelByIdQueryHandler;
+
+    GetAlleArtikelQueryHandler getAlleArtikelQueryHandler;
+
     ArgumentCaptor<ArtikelEntity> artikelEntityCaptor;
     ArgumentCaptor<String> artikelIdCaptor;
 
@@ -51,14 +56,17 @@ class ArtikelUnitTest {
         saveArtikelValidator = new SaveArtikelValidatorImpl();
         artikelEventRepository = new ArtikelEventRepositoryImpl();
         getArtikelByIdQueryHandler = new GetArtikelByIdQueryHandler();
+        getAlleArtikelQueryHandler = new GetAlleArtikelQueryHandler();
 
         FieldUtils.writeField(saveArtikelHandler, "saveArtikelValidator", saveArtikelValidator, true);
         FieldUtils.writeField(saveArtikelHandler, "artikelEventRepository", artikelEventRepository, true);
         FieldUtils.writeField(getArtikelByIdQueryHandler, "artikelEventRepository", artikelEventRepository, true);
+        FieldUtils.writeField(getAlleArtikelQueryHandler, "artikelEventRepository", artikelEventRepository, true);
         FieldUtils.writeField(artikelEventRepository, "artikelStore", artikelStore, true);
 
         when(applicationContext.getBean(SaveArtikelHandler.class)).thenReturn(saveArtikelHandler);
         when(applicationContext.getBean(GetArtikelByIdQueryHandler.class)).thenReturn(getArtikelByIdQueryHandler);
+        when(applicationContext.getBean(GetAlleArtikelQueryHandler.class)).thenReturn(getAlleArtikelQueryHandler);
 
         artikelEntityCaptor = ArgumentCaptor.forClass(ArtikelEntity.class);
         artikelIdCaptor = ArgumentCaptor.forClass(String.class);
@@ -118,4 +126,14 @@ class ArtikelUnitTest {
 
     }
 
+
+    @Test
+    void getAlleArtikel() {
+
+        Artikel artikel = new Artikel(applicationContext, null);
+
+        artikel.handleQuery(new GetAlleArtikelQuery());
+
+        Mockito.verify(artikelStore, times(1)).findAll();
+    }
 }
