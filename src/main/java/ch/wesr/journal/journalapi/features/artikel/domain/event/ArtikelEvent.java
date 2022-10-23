@@ -9,9 +9,5 @@ import java.time.LocalDateTime;
 public interface ArtikelEvent extends Event {
 
     ArtikelEventId getEventId();
-    ArtikelId getArtikelId();
-    String getTitel();
-    String getArtikelInhalt();
-
     LocalDateTime getTimestamp();
 }

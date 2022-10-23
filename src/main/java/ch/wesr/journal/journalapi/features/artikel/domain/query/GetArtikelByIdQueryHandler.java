@@ -25,7 +25,7 @@ public class GetArtikelByIdQueryHandler implements QueryHandler<GetArtikelByIDQu
     public Either<QueryFailure, GetArtikekelByIdRequested> handle(GetArtikelByIDQuery query, ArtikelId entityId) {
         log.info("query: {}", query.getArtikelId().toString());
 
-        ArtikelEvent artikelEvent = artikelEventRepository.getArtikelEventByArtikelId(entityId);
+        GetArtikekelByIdRequested artikelEvent = (GetArtikekelByIdRequested) artikelEventRepository.getArtikelEventByArtikelId(entityId);
 
         GetArtikekelByIdRequested getArtikekelByIdRequested = GetArtikekelByIdRequested.eventOf(artikelEvent.getArtikelId(), artikelEvent.getTitel(), artikelEvent.getArtikelInhalt(), artikelEvent.getTimestamp());
         // FIXME Either.left

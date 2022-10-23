@@ -3,6 +3,10 @@ package ch.wesr.journal.journalapi.features.artikel.domain.entity;
 import ch.wesr.journal.journalapi.features.artikel.domain.Artikel;
 import ch.wesr.journal.journalapi.features.artikel.domain.command.SaveArtikel;
 import ch.wesr.journal.journalapi.features.artikel.domain.event.ArtikelEvent;
+import ch.wesr.journal.journalapi.features.artikel.domain.event.GetAllArtikelRequested;
+import ch.wesr.journal.journalapi.features.artikel.domain.event.GetArtikekelByIdRequested;
+import ch.wesr.journal.journalapi.features.artikel.domain.event.SaveArtikelRequested;
+import ch.wesr.journal.journalapi.features.artikel.domain.query.GetAlleArtikelQuery;
 import ch.wesr.journal.journalapi.features.artikel.domain.query.GetArtikelByIDQuery;
 import ch.wesr.journal.journalapi.features.artikel.domain.vo.ArtikelId;
 import ch.wesr.journal.journalapi.shared.CommandFailure;
@@ -16,6 +20,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.mockito.Mockito.mock;
 
@@ -41,11 +46,11 @@ class ArtikelIntegrationTest {
         // assert das ein Event zurueck kommt
         Assertions.assertThat(events.isRight()).isTrue();
 
-        ArtikelEvent event = (ArtikelEvent) events.get();
+        SaveArtikelRequested event = (SaveArtikelRequested) events.get();
 
         Assertions.assertThat(event)
                 .isNotNull()
-                .extracting(ArtikelEvent::getArtikelId, ArtikelEvent::getTitel, ArtikelEvent::getArtikelInhalt, ArtikelEvent::getTimestamp)
+                .extracting(SaveArtikelRequested::getArtikelId, SaveArtikelRequested::getTitel, SaveArtikelRequested::getArtikelInhalt, SaveArtikelRequested::getTimestamp)
                 .contains(saveArtikel.getArtikelId(), saveArtikel.getTitel(), saveArtikel.getArtikelInhalt(), saveArtikel.getTimestamp());
 
     }
@@ -67,11 +72,47 @@ class ArtikelIntegrationTest {
 
         Assertions.assertThat(either.isRight()).isTrue();
 
-        ArtikelEvent artikelEventFromDb = (ArtikelEvent) either.get();
+        GetArtikekelByIdRequested artikelEventFromDb = (GetArtikekelByIdRequested) either.get();
 
         Assertions.assertThat(artikelEventFromDb).isNotNull()
-                .extracting(artikelEvent -> artikelEvent.getArtikelId().id, ArtikelEvent::getTitel, ArtikelEvent::getArtikelInhalt, ArtikelEvent::getTimestamp)
+                .extracting(artikelEvent -> artikelEvent.getArtikelId().id, GetArtikekelByIdRequested::getTitel, GetArtikekelByIdRequested::getArtikelInhalt, GetArtikekelByIdRequested::getTimestamp)
                 .contains(saveArtikel.getArtikelId().id, saveArtikel.getTitel(), saveArtikel.getArtikelInhalt(), saveArtikel.getTimestamp());
+
+
+    }
+
+    @Test
+    void getAlleArtikel() {
+        // save Events
+        // given
+        ArtikelId artikelId = new ArtikelId();
+        SaveArtikel saveArtikel = SaveArtikel.commandOf(artikelId, "Titel", "Inhalt", LocalDateTime.now());
+        Artikel artikel = new Artikel(applicationContext, artikelId);
+        artikel.handleCommand(saveArtikel);
+
+        ArtikelId artikelId1 = new ArtikelId();
+        SaveArtikel saveArtikel1 = SaveArtikel.commandOf(artikelId1, "Titel", "Inhalt", LocalDateTime.now());
+        Artikel artikel1 = new Artikel(applicationContext, artikelId1);
+        artikel1.handleCommand(saveArtikel1);
+
+
+        ArtikelId artikelId2 = new ArtikelId();
+        SaveArtikel saveArtikel2 = SaveArtikel.commandOf(artikelId2, "Titel", "Inhalt", LocalDateTime.now());
+        Artikel artikel2 = new Artikel(applicationContext, artikelId2);
+        artikel2.handleCommand(saveArtikel2);
+
+
+        Artikel artikel4 = new Artikel(applicationContext, null);
+        Either<QueryFailure, Event> events = artikel4.handleQuery(new GetAlleArtikelQuery());
+
+        // assert das ein Event zurueck kommt
+        Assertions.assertThat(events.isRight()).isTrue();
+
+        GetAllArtikelRequested getAllArtikelRequested = (GetAllArtikelRequested) events.get();
+
+        Assertions.assertThat(getAllArtikelRequested.getGetArtikekelByIdRequestedList())
+                .isNotNull().isNotEmpty()
+                .hasSize(3);
 
 
     }

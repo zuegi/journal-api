@@ -1,6 +1,7 @@
 package ch.wesr.journal.journalapi.features.artikel.domain.query;
 
 import ch.wesr.journal.journalapi.features.artikel.domain.entity.ArtikelEventRepository;
+import ch.wesr.journal.journalapi.features.artikel.domain.event.ArtikelEvent;
 import ch.wesr.journal.journalapi.features.artikel.domain.event.GetAllArtikelRequested;
 import ch.wesr.journal.journalapi.features.artikel.domain.event.GetArtikekelByIdRequested;
 import ch.wesr.journal.journalapi.features.artikel.domain.vo.ArtikelId;
@@ -10,6 +11,8 @@ import io.vavr.control.Either;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Slf4j
 @Component
@@ -22,8 +25,7 @@ public class GetAlleArtikelQueryHandler  implements QueryHandler<GetAlleArtikelQ
     public Either<QueryFailure, GetAllArtikelRequested> handle(GetAlleArtikelQuery query, ArtikelId entityId) {
         log.info("Alle Artikel werden requested");
 
-        artikelEventRepository.getAllArtikelEvents();
-        return null;
+        return Either.right(artikelEventRepository.getAllArtikelEvents());
     }
 
 }
