@@ -1,40 +1,68 @@
 package ch.wesr.journal.journalapi.features.artikel.domain;
 
 import ch.wesr.journal.journalapi.features.artikel.domain.command.SaveArtikel;
-import ch.wesr.journal.journalapi.features.artikel.domain.command.SaveArtikelHandler;
-import ch.wesr.journal.journalapi.features.artikel.domain.query.GetAlleArtikelQuery;
-import ch.wesr.journal.journalapi.features.artikel.domain.query.GetAlleArtikelQueryHandler;
-import ch.wesr.journal.journalapi.features.artikel.domain.query.GetArtikelByIDQuery;
-import ch.wesr.journal.journalapi.features.artikel.domain.query.GetArtikelByIdQueryHandler;
+import ch.wesr.journal.journalapi.features.artikel.domain.entity.ArtikelEntity;
 import ch.wesr.journal.journalapi.features.artikel.domain.vo.ArtikelId;
-import ch.wesr.journal.journalapi.shared.AggregateRoot;
-import ch.wesr.journal.journalapi.shared.AggregateRootBehavior;
-import ch.wesr.journal.journalapi.shared.AggregateRootBehaviorBuilder;
-import org.springframework.context.ApplicationContext;
+import lombok.Getter;
 
-public class Artikel extends AggregateRoot<Artikel, ArtikelId> {
+import java.time.LocalDateTime;
 
-    public Artikel(ApplicationContext applicationContext, ArtikelId entityId) {
-        super(applicationContext, entityId);
+@Getter
+public class Artikel {
+
+    ArtikelId artikelId;
+    ArtikelEntity artikelEntity;
+
+    Author author;
+
+    private Artikel(ArtikelId artikelId, ArtikelEntity artikelEntity) {
+        this.artikelId = artikelId;
+        this.artikelEntity = artikelEntity;
     }
 
-    @Override
-    protected AggregateRootBehavior<ArtikelId> initialBehavior() {
-        AggregateRootBehaviorBuilder<ArtikelId> behaviorBuilder = new AggregateRootBehaviorBuilder<>();
-        behaviorBuilder.setCommandHandler(SaveArtikel.class, getCommandHandler(SaveArtikelHandler.class));
-        behaviorBuilder.setQueryHandler(GetArtikelByIDQuery.class, getQueryHandler(GetArtikelByIdQueryHandler.class));
-        behaviorBuilder.setQueryHandler(GetAlleArtikelQuery.class, getQueryHandler(GetAlleArtikelQueryHandler.class));
-        return behaviorBuilder.build();
+    // Könnte man an dieser Stelle nicht auch den SaveArtikel (Command) übergeben?
+    public static Artikel create(ArtikelId artikelId, String titel, String inhalt, LocalDateTime now) {
+        ArtikelEntity artikelEntity = new ArtikelEntity();
+        artikelEntity.setArtikelId(artikelId.id);
+        artikelEntity.setTitel(titel);
+        artikelEntity.setArtikelInhalt(inhalt);
+        artikelEntity.setErstellungsTS(now);
+
+        Artikel artikel =  new Artikel(artikelId, artikelEntity);
+
+        artikel.validate();
+        return artikel;
     }
 
-    @Override
-    public boolean sameIdentityAs(Artikel other) {
-        return other != null && entityId.sameValueAs(other.entityId);
+    public static Artikel load(ArtikelEntity artikelEntity) {
+        Artikel artikel =  new Artikel(new ArtikelId(artikelEntity.getArtikelId()), artikelEntity);
+        artikel.validate();
+        return artikel;
     }
 
-    @Override
-    public ArtikelId id() {
-        return entityId;
+
+    public Artikel updateTitel(String titel) {
+        ArtikelEntity entity = this.getArtikelEntity();
+        entity.setTitel(titel);
+        entity.setModifikationTS(LocalDateTime.now());
+        this.validate();
+        return this;
     }
 
+    public Artikel updateInhalt(String inhalt) {
+        ArtikelEntity entity = this.getArtikelEntity();
+        entity.setArtikelInhalt(inhalt);
+        entity.setModifikationTS(LocalDateTime.now());
+        this.validate();
+        return this;
+    }
+
+    public void addAuthor(Author author) {
+       this.author = author;
+       this.validate();
+    }
+
+    private void validate() {
+        // TODO was immer hier zu validieren ist
+    }
 }

@@ -1,6 +1,6 @@
 package ch.wesr.journal.journalapi.features.artikel.domain.entity;
 
-import ch.wesr.journal.journalapi.features.artikel.domain.Artikel;
+import ch.wesr.journal.journalapi.features.artikel.domain.ArtikelDings;
 import ch.wesr.journal.journalapi.features.artikel.domain.command.SaveArtikel;
 import ch.wesr.journal.journalapi.features.artikel.domain.command.SaveArtikelHandler;
 import ch.wesr.journal.journalapi.features.artikel.domain.command.SaveArtikelValidator;
@@ -32,7 +32,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
-class ArtikelUnitTest {
+class ArtikelDingsUnitTest {
 
     ApplicationContext applicationContext = Mockito.mock(ApplicationContext.class);
     ArtikelEventRepository artikelEventRepository;
@@ -82,10 +82,10 @@ class ArtikelUnitTest {
                 "<h1>Git - entferne lokale Branches</h1><p><br></p><p>Entferne lokale git branches, welche schon merged sind.</p><p><br></p><ol><li>Öffne eine Shell</li><li>Fetch den letzten Stand von git</li><li><code>git fetch</code></li><li>Liste alle lokalen git branches auf</li><li><code>git branch</code></li><li>Lösche alle lokalen git branches, welche in den main branch merged wurden.</li><li><code>git branch --merged main | grep -v -e 'main' -e 'release' | xargs -n 1 -r git branch -d</code></li><li>Mit dem -e Switch kann man verschiedene Pattern angeben.</li><li>Liste alle übrig gebliebenen lokalen git branches auf</li><li><code>git branch</code></li></ol><p><br></p>",
                 now);
 
-        Artikel artikel = new Artikel(applicationContext, artikelId);
+        ArtikelDings artikelDings = new ArtikelDings(applicationContext, artikelId);
 
         // when
-        artikel.handleCommand(saveArtikel);
+        artikelDings.handleCommand(saveArtikel);
 
         // then
         Mockito.verify(artikelStore, times(1)).save(artikelEntityCaptor.capture());
@@ -103,7 +103,7 @@ class ArtikelUnitTest {
     void getArtikelById() {
         // given
         ArtikelId artikelId = new ArtikelId();
-        Artikel artikel = new Artikel(applicationContext, artikelId);
+        ArtikelDings artikelDings = new ArtikelDings(applicationContext, artikelId);
         GetArtikelByIDQuery getArtikelByIDQuery = GetArtikelByIDQuery.eventOf(artikelId);
 
         ArtikelEntity artikelEntity = new ArtikelEntity();
@@ -115,7 +115,7 @@ class ArtikelUnitTest {
         when(artikelStore.findByArtikelId(any(String.class))).thenReturn(Optional.of(artikelEntity));
 
         // when
-        Either<QueryFailure, Event> event = artikel.handleQuery(getArtikelByIDQuery);
+        Either<QueryFailure, Event> event = artikelDings.handleQuery(getArtikelByIDQuery);
 
 
         // then
@@ -130,9 +130,9 @@ class ArtikelUnitTest {
     @Test
     void getAlleArtikel() {
 
-        Artikel artikel = new Artikel(applicationContext, null);
+        ArtikelDings artikelDings = new ArtikelDings(applicationContext, null);
 
-        artikel.handleQuery(new GetAlleArtikelQuery());
+        artikelDings.handleQuery(new GetAlleArtikelQuery());
 
         Mockito.verify(artikelStore, times(1)).findAll();
     }

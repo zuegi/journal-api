@@ -26,4 +26,6 @@ public class ArtikelEntity {
     private String artikelInhalt;
 
     private LocalDateTime erstellungsTS;
+
+    private LocalDateTime modifikationTS;
 }

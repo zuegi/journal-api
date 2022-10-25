@@ -4,7 +4,7 @@ import ch.wesr.journal.journalapi.features.artikel.domain.vo.ArtikelId;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class ArtikelIdTest {
+class ArtikelDingsIdTest {
 
     @Test
     void notSameId() {

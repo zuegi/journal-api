@@ -1,7 +1,7 @@
 package ch.wesr.journal.journalapi.features.artikel.application;
 
 import ch.wesr.journal.journalapi.features.artikel.domain.command.SaveArtikel;
-import ch.wesr.journal.journalapi.features.artikel.domain.Artikel;
+import ch.wesr.journal.journalapi.features.artikel.domain.ArtikelDings;
 import ch.wesr.journal.journalapi.features.artikel.domain.event.GetArtikekelByIdRequested;
 import ch.wesr.journal.journalapi.features.artikel.domain.event.SaveArtikelRequested;
 import ch.wesr.journal.journalapi.features.artikel.domain.query.GetAlleArtikelQuery;
@@ -25,23 +25,23 @@ public class ArtikelService {
 
     public Either<CommandFailure, SaveArtikelRequested> perform(SaveArtikel saveArtikel) {
 
-        Artikel artikel = new Artikel(applicationContext, saveArtikel.getArtikelId());
+        ArtikelDings artikelDings = new ArtikelDings(applicationContext, saveArtikel.getArtikelId());
 
-        return artikel.handleCommand(saveArtikel);
+        return artikelDings.handleCommand(saveArtikel);
 
     }
 
     public Either<QueryFailure, GetArtikekelByIdRequested> perform(GetArtikelByIDQuery getArtikelByIDQuery) {
 
-        Artikel artikel = new Artikel(applicationContext, getArtikelByIDQuery.getArtikelId());
+        ArtikelDings artikelDings = new ArtikelDings(applicationContext, getArtikelByIDQuery.getArtikelId());
 
-        return artikel.handleQuery(getArtikelByIDQuery);
+        return artikelDings.handleQuery(getArtikelByIDQuery);
     }
 
     public Either<QueryFailure, GetArtikekelByIdRequested> perform(GetAlleArtikelQuery getAlleArtikelQuery) {
 
-        Artikel artikel = new Artikel(applicationContext, null);
+        ArtikelDings artikelDings = new ArtikelDings(applicationContext, null);
 
-        return artikel.handleQuery(getAlleArtikelQuery);
+        return artikelDings.handleQuery(getAlleArtikelQuery);
     }
 }
