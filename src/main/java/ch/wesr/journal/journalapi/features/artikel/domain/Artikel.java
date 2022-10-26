@@ -1,6 +1,5 @@
 package ch.wesr.journal.journalapi.features.artikel.domain;
 
-import ch.wesr.journal.journalapi.features.artikel.domain.command.SaveArtikel;
 import ch.wesr.journal.journalapi.features.artikel.domain.entity.ArtikelEntity;
 import ch.wesr.journal.journalapi.features.artikel.domain.vo.ArtikelId;
 import lombok.Getter;
@@ -57,12 +56,14 @@ public class Artikel {
         return this;
     }
 
-    public void addAuthor(Author author) {
+    public Artikel addAuthor(Author author) {
        this.author = author;
        this.validate();
+       return this;
     }
 
     private void validate() {
         // TODO was immer hier zu validieren ist
     }
+
 }
